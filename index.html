@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 给亲爱的甘小姐 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .heart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        
+        .heart {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 250px;
+            background-color: #ff4d6d;
+            animation: heartbeat 1.5s ease-in-out infinite alternate;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background-color: #ff4d6d;
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            top: -125px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: 125px;
+        }
+        
+        @keyframes heartbeat {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+            100% {
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+        
+        .heart.shards {
+            animation: none;
+        }
+        
+        .shard {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4d6d;
+            clip-path: polygon(50% 0%, 0% 35%, 20% 100%, 80% 100%, 100% 35%);
+            opacity: 0;
+            transform-origin: center;
+        }
+        
+        .message {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin-top: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 3px solid #ffafbd;
+            transition: all 0.8s ease-out;
+        }
+        
+        .message.show {
+            display: block;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+        
+        .message h1 {
+            color: #ff4d6d;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message p {
+            color: #555;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .signature {
+            margin-top: 30px;
+            font-size: 1.3rem;
+            color: #ff4d6d;
+            font-weight: bold;
+            font-style: italic;
+        }
+        
+        .hint {
+            color: #ff4d6d;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .heart-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .heart, .heart:before, .heart:after {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .heart:before {
+                top: -100px;
+            }
+            
+            .heart:after {
+                left: 100px;
+            }
+            
+            .message h1 {
+                font-size: 2rem;
+            }
+            
+            .message p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heart-container" id="heartContainer">
+            <div class="heart" id="heart"></div>
+            <div id="shards"></div>
+        </div>
+        
+        <div class="hint" id="hint">💝 点击爱心，解锁惊喜 💝</div>
+        
+        <div class="message" id="message">
+            <h1>❤️ 亲爱的甘小姐 ❤️</h1>
+            <p>祝你天天开心，学业牛逼，颜值权威！</p>
+            <p>愿你每一天都笑得像花儿一样灿烂！</p>
+            <p>祝你学业就像开了挂，门门功课都优秀！</p>
+            <p>更重要的是，你永远那么美，颜值就是正义！</p>
+            <p>永远支持你，为你加油打气！</p>
+            <div class="signature">
+                最真诚的祝福 💕<br>
+                <span id="date"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const heart = document.getElementById('heart');
+        const heartContainer = document.getElementById('heartContainer');
+        const message = document.getElementById('message');
+        const hint = document.getElementById('hint');
+        const shardsContainer = document.getElementById('shards');
+        const dateElement = document.getElementById('date');
+        
+        // 设置当前日期
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = now.toLocaleDateString('zh-CN', options);
+        
+        let isBroken = false;
+        
+        function createShard(x, y, index) {
+            const shard = document.createElement('div');
+            shard.className = 'shard';
+            
+            // 随机位置
+            const centerX = heartContainer.offsetWidth / 2;
+            const centerY = heartContainer.offsetHeight / 2;
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 100;
+            
+            shard.style.left = (centerX - 15) + 'px';
+            shard.style.top = (centerY - 15) + 'px';
+            shard.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+            shard.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+            shard.style.setProperty('--rot', `${(Math.random() - 0.5) * 360}deg`);
+            
+            // 随机颜色
+            const hue = 340 + Math.random() * 20;
+            shard.style.backgroundColor = `hsl(${hue}, 100%, 65%)`;
+            
+            // 随机大小
+            const size = 15 + Math.random() * 25;
+            shard.style.width = `${size}px`;
+            shard.style.height = `${size}px`;
+            
+            shardsContainer.appendChild(shard);
+            
+            // 触发碎片动画
+            setTimeout(() => {
+                shard.style.animation = `fly 1.5s ease-out forwards`;
+                shard.style.opacity = 1;
+            }, index * 20);
+        }
+        
+        function breakHeart() {
+            if (isBroken) return;
+            isBroken = true;
+            
+            // 隐藏提示
+            hint.style.display = 'none';
+            
+            // 添加破碎样式
+            heart.classList.add('shards');
+            
+            // 创建碎片
+            const numShards = 25;
+            for (let i = 0; i < numShards; i++) {
+                createShard(0, 0, i);
+            }
+            
+            // 隐藏爱心
+            setTimeout(() => {
+                heart.style.opacity = 0;
+                
+                // 显示贺卡信息
+                setTimeout(() => {
+                    message.classList.add('show');
+                }, 500);
+            }, 800);
+        }
+        
+        // 点击事件
+        heartContainer.addEventListener('click', breakHeart);
+        
+        // 触摸事件（移动端）
+        heartContainer.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            breakHeart();
+        });
+        
+        // 添加键盘支持（空格/回车）
+        document.addEventListener('keydown', (e) => {
+            if ((e.code === 'Space' || e.code === 'Enter') && !isBroken) {
+                breakHeart();
+            }
+        });
+        
+        // 初始提示动画
+        setTimeout(() => {
+            hint.style.opacity = 1;
+        }, 500);
+    </script>
+</body>
+</html>
